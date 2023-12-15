@@ -1,0 +1,10 @@
+html
+{
+    width: 300px; /* max: 1000px */
+    height: 500px; /* max: 750px */
+}
+.modal {
+    padding: 1em;
+    width: 30ch;
+    height: 40ch;
+}
