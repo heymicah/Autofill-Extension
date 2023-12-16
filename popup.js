@@ -63,28 +63,71 @@ function add_profile() {
     let new_profile = new profile(profile_name, first_name, last_name, email, address_line_1, address_line_2, city, zip_code, usa_state, country, phone_number)
     return new_profile;
 }
-const profiles = []
+let profiles = []
 const modal = document.querySelector('#modal');
-const closeModal = document.querySelector('.cancel-button')
-const saveModal = document.querySelector('.save-button')
+const closeModal = document.querySelector('.cancel-button');
+const saveModal = document.querySelector('.save-button');
 const dropdown = document.querySelector('#profile-select');
-const selected = dropdown.value;
+const delete_button = document.querySelector('.delete-button');
+
 dropdown.addEventListener('change', () => {
     if (dropdown.options[dropdown.selectedIndex].value === 'add-profile') {
-        modal.showModal();
+        modal.showModal()
+    } else if (dropdown.options[dropdown.selectedIndex].value != '') {
+
     }
 })
+/*
+
+Button Functions
+
+ */
 closeModal.addEventListener('click', () => {
     modal.close();
 })
 saveModal.addEventListener('click', () => {
     let new_profile = add_profile();
     profiles.push(new_profile);
+    chrome.storage.local.set({'Profiles': JSON.stringify(profiles)})
     // Add profile to dropdown
     let newOption = new Option(new_profile.get_profile_name(), new_profile.get_profile_name());
     dropdown.add(newOption,undefined);
     modal.close();
+    console.log(profiles)
 })
+
+delete_button.addEventListener('click', () => {
+    let profile = dropdown.options[dropdown.selectedIndex]
+    console.log(profile.index)
+    for (let i = 0; i < profiles.length; i++) {
+        if (profile.textContent === profiles[i].profile_name) {
+            profiles.splice(i, 1)
+            chrome.storage.local.set({'Profiles': JSON.stringify(profiles)})
+            console.log(profiles)
+            dropdown.removeChild(dropdown.options[profile.index]);
+        }
+    }
+})
+
+document.addEventListener("DOMContentLoaded", () => {
+    chrome.storage.local.get(['Profiles'], (data) => {
+    let obj_loaded_profiles = data;
+    console.log(JSON.parse(obj_loaded_profiles['Profiles']));
+    let arr_loaded_profiles = JSON.parse(obj_loaded_profiles['Profiles']);
+    load_dropdown(arr_loaded_profiles)
+    })
+    console.log(profiles)
+})
+
+function load_dropdown(arr_loaded_profiles=[]) {
+    profiles = profiles.concat(arr_loaded_profiles)
+    const dropdown = document.querySelector('#profile-select');
+    for (let i = 0; i < arr_loaded_profiles.length; i++) {
+        let newOption = new Option(arr_loaded_profiles[i].profile_name, arr_loaded_profiles[i].profile_name);
+        dropdown.add(newOption, undefined);
+    }
+}
+
 
 
 
