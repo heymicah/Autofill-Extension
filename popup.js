@@ -12,7 +12,7 @@ class profile {
         this.usa_state = usa_state
         this.country = country
     }
-    get_profile_name() {
+    get get_profile_name() {
         return this.profile_name;
     }
     get_first_name() {
@@ -21,7 +21,7 @@ class profile {
     get_last_name() {
         return this.last_name;
     }
-    get_email() {
+    get get_email() {
         return this.email;
     }
     get_phone_number() {
@@ -74,7 +74,7 @@ dropdown.addEventListener('change', () => {
     if (dropdown.options[dropdown.selectedIndex].value === 'add-profile') {
         modal.showModal()
     } else if (dropdown.options[dropdown.selectedIndex].value != '') {
-
+        chrome.storage.local.set({'current_profile': JSON.stringify(dropdown.options[dropdown.selectedIndex].value)})
     }
 })
 /*
@@ -127,6 +127,7 @@ function load_dropdown(arr_loaded_profiles=[]) {
         dropdown.add(newOption, undefined);
     }
 }
+
 
 
 

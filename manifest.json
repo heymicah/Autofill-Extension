@@ -6,6 +6,12 @@
     "service_worker": "service_worker.js",
     "type": "module"
   },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content_script.js"]
+    }
+  ],
   "action": {
     "default_popup": "popup.html"
   },
